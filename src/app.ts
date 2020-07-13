@@ -11,6 +11,9 @@ class App {
 
   private initializeMiddlewares() {
     console.log('this is middleware');
+    this.app.get('/', (_req, res) => {
+      res.send(200);
+    });
   }
 
   public listen() {
