@@ -3,6 +3,7 @@ import App from '../../app';
 import { expect } from 'chai';
 
 const app = new App(5000);
+app.listen();
 const agent = request(app.app);
 
 describe('User Test', () => {

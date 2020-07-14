@@ -1,4 +1,10 @@
 import express from 'express';
+// import config from '../ormconfig';
+import { createConnection, getConnectionOptions } from 'typeorm';
+import router from './routes/index';
+import bodyParser from 'body-parser';
+import config from '../ormconfig';
+
 class App {
   public app: express.Application;
   public port: number;
@@ -9,11 +15,17 @@ class App {
     this.initializeMiddlewares();
   }
 
-  private initializeMiddlewares() {
-    console.log('this is middleware');
-    this.app.get('/', (_req, res) => {
-      res.send(200);
-    });
+  private async initializeMiddlewares() {
+    const option = await getConnectionOptions();
+    Object.assign(option, config);
+    const connection = await createConnection(option);
+    if (connection) {
+      console.log('database connection :)');
+    } else {
+      throw Error();
+    }
+    this.app.use(bodyParser.json());
+    this.app.use('/', router);
   }
 
   public listen() {
