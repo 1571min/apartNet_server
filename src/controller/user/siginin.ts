@@ -2,6 +2,11 @@ import userUtil from '../../util/userUtil';
 import userRepository from '../../database/repository/userRepository';
 import { Express, Request, Response, NextFunction } from 'express';
 
+type SessionRequest = Request & {
+  session: Express.Session;
+  sessionID: string;
+};
+
 export default {
   post: async (req: Request, res: Response, _next: NextFunction) => {
     try {
@@ -15,6 +20,7 @@ export default {
             email,
           };
           const token = userUtil.jwt.sign(userInfo);
+          req!.session!.userToken = token;
           res.status(200).send('ok');
         } else {
           res.status(403).send('invaild password');

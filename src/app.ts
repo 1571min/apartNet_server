@@ -4,7 +4,9 @@ import { createConnection, getConnectionOptions } from 'typeorm';
 import router from './routes/index';
 import bodyParser from 'body-parser';
 import config from '../ormconfig';
-
+import session from 'express-session';
+import cors from 'cors';
+import morgan from 'morgan';
 class App {
   public app: express.Application;
   public port: number;
@@ -25,6 +27,17 @@ class App {
       throw Error();
     }
     this.app.use(bodyParser.json());
+    this.app.use(
+      session({
+        secret: 'moduerun',
+        resave: false,
+        saveUninitialized: true,
+      })
+    );
+
+    this.app.use(cors());
+    this.app.use(morgan('dev'));
+
     this.app.use('/', router);
   }
 
