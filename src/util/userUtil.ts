@@ -25,8 +25,8 @@ export default {
       );
     },
 
-    verify(token: string, callback: jwt.VerifyOptions | undefined) {
-      return jwt.verify(token, 'testkey', callback);
+    verify(token: string) {
+      return jwt.verify(token, 'testkey');
     },
   },
 };
