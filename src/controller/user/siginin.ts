@@ -10,7 +10,7 @@ type SessionRequest = Request & {
 export default {
   post: async (req: Request, res: Response, _next: NextFunction) => {
     try {
-      const { email, password } = req.body;
+      const { email, password } = req.body.data;
       const cryptedPassword = userUtil.cryptoPassword(password);
       const response = await userRepository.getUser(email);
 
@@ -21,7 +21,11 @@ export default {
           };
           const token = userUtil.jwt.sign(userInfo);
           req!.session!.userToken = token;
-          res.status(200).send('ok');
+          res.status(200).json({
+            access_token: token,
+            token_type: 'JWT',
+            expires_in: 4600,
+          });
         } else {
           res.status(403).send('invaild password');
         }
