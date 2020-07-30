@@ -6,6 +6,14 @@ require('dotenv').config();
 interface userInfo {
   email: string;
 }
+export type jwtReturn =
+  | {
+      exp: number;
+      data: userInfo;
+      iat: number;
+    }
+  | string
+  | object;
 
 export default {
   cryptoPassword: (data: string): any => {
@@ -25,8 +33,12 @@ export default {
       );
     },
 
-    verify(token: string) {
-      return jwt.verify(token, 'testkey');
+    verify(token: string | undefined): any {
+      if (token) {
+        return jwt.verify(token, 'testkey');
+      } else {
+        return {};
+      }
     },
   },
 };

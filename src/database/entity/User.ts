@@ -16,8 +16,14 @@ class User {
   @Column({ nullable: false })
   email!: string;
 
-  @Column({ nullable: false, default: '1111' })
+  @Column({ nullable: false })
   password!: string;
+
+  @Column({ nullable: false })
+  address!: string;
+
+  @Column({ nullable: false })
+  fullName!: string;
 
   @CreateDateColumn({
     type: 'timestamp',

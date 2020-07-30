@@ -3,10 +3,13 @@ import express from 'express';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import router from './routes/index';
 import bodyParser from 'body-parser';
-import config from '../ormconfig';
+// import config from '../ormconfig';
+const config = require('../ormconfig');
 import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
+import middleware from './middleware';
+
 class App {
   public app: express.Application;
   public port: number;
@@ -37,8 +40,8 @@ class App {
 
     this.app.use(cors());
     this.app.use(morgan('dev'));
-
     this.app.use('/', router);
+    this.app.use(middleware.errorHandler);
   }
 
   public listen() {
