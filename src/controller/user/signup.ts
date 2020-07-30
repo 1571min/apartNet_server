@@ -2,9 +2,10 @@ import userUtil from '../../util/userUtil';
 import userRepository from '../../database/repository/userRepository';
 import { Express, Request, Response, NextFunction } from 'express';
 import { userInfo } from '../../database/repository/userRepository';
+import HttpException from '../../exceptions/HttpException';
 
 export default {
-  post: async (req: Request, res: Response, _next: NextFunction) => {
+  post: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password, full_name, address_name } = req.body;
       const cryptedPassword = userUtil.cryptoPassword(password);
@@ -19,10 +20,10 @@ export default {
         await userRepository.insertUser(user);
         res.status(200).send('ok');
       } else {
-        res.status(403).send('email aleady exist');
+        next(new HttpException(403, 'email aleady exist'));
       }
     } catch (error) {
-      res.status(500).send('server error');
+      next(new HttpException(500, error));
     }
   },
 };
