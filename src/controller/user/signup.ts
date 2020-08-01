@@ -7,15 +7,15 @@ import HttpException from '../../exceptions/HttpException';
 export default {
   post: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password, full_name, address_name } = req.body;
+      const { email, password, fullName, address } = req.body;
       const cryptedPassword = userUtil.cryptoPassword(password);
       const response = await userRepository.getUser(email);
       if (!response) {
         const user: userInfo = {
           email,
           password: cryptedPassword,
-          full_name,
-          address_name,
+          fullName,
+          address,
         };
         await userRepository.insertUser(user);
         res.status(200).send('ok');

@@ -2,7 +2,8 @@ import request from 'supertest';
 import App from '../../app';
 import { userFactory } from '../../database/factory/user.factory';
 import { getRepository, createConnection, getConnectionOptions } from 'typeorm';
-import config from '../../../ormconfig';
+// import config from '../../../ormconfig';
+const config = require('../../../ormconfig');
 import User from '../../database/entity/User';
 
 const app = new App(5000);
@@ -30,8 +31,7 @@ describe('User Test', () => {
       return agent
         .post('/user/signin')
         .send({
-          email: 'test@gmail.com',
-          password: '1234',
+          inputValue: { email: 'test@gmail.com', password: '1234' },
         })
         .expect(200);
     });
@@ -39,8 +39,7 @@ describe('User Test', () => {
       return agent
         .post('/user/signin')
         .send({
-          email: 'test@gmail.com',
-          password: '1111',
+          inputValue: { email: 'test@gmail.com', password: '1111' },
         })
         .expect(403);
     });
@@ -49,8 +48,7 @@ describe('User Test', () => {
       return agent
         .post('/user/signin')
         .send({
-          email: 'test44@gmail.com',
-          password: '1234',
+          inputValue: { email: 'test44@gmail.com', password: '1234' },
         })
         .expect(404);
     });
@@ -67,8 +65,8 @@ describe('User Test', () => {
         .send({
           email: 'test12@gmail.com',
           password: '1234',
-          full_name: 'leemintaek',
-          address_name: 'seoul',
+          fullName: 'leemintaek',
+          address: 'seoul',
         })
         .expect(200);
     });

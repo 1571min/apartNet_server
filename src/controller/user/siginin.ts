@@ -11,7 +11,7 @@ type SessionRequest = Request & {
 export default {
   post: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, password } = req.body.data;
+      const { email, password } = req.body.inputValue;
       const cryptedPassword = userUtil.cryptoPassword(password);
       const response = await userRepository.getUser(email);
 
