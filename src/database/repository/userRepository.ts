@@ -3,8 +3,8 @@ import User from '../entity/User';
 export interface userInfo {
   email: string;
   password: string;
-  full_name: string;
-  address_name: string;
+  fullName: string;
+  address: string;
 }
 export default {
   getUser: async (email: string) => {
