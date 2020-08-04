@@ -82,4 +82,23 @@ describe('User Test', () => {
         .expect(403);
     });
   });
+  describe('POST /user/userinfo', () => {
+    it('should return 200 OK', async () => {
+      const res = await agent.post('/user/signin').send({
+        inputValue: { email: 'test@gmail.com', password: '1234' },
+      });
+      const accessToken = res.body.access_token;
+      const userInfoRes = await agent
+        .get('/user/userinfo')
+        .set('Authorization', `Bearer ${accessToken}`);
+      return expect(userInfoRes.body).toEqual({
+        email: 'test@gmail.com',
+        address: '서울특별시 강남구 압구정로33길 70 압구정 현대아파트 53동',
+        fullName: 'kim',
+      });
+    });
+    it('should return 403', () => {
+      return agent.get('/user/userinfo').set('Authorization', '').expect(403);
+    });
+  });
 });
