@@ -9,6 +9,7 @@ import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import middleware from './middleware';
+import helmet from 'helmet';
 
 class App {
   public app: express.Application;
@@ -38,6 +39,7 @@ class App {
       })
     );
 
+    this.app.use(helmet());
     this.app.use(cors());
     this.app.use(morgan('dev'));
     this.app.use('/', router);
