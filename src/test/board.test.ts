@@ -2,7 +2,8 @@ import request from 'supertest';
 import App from '../app';
 import {getRepository, createConnection, getConnectionOptions} from 'typeorm';
 
-const config = require('../../../ormconfig');
+const config = require('../../ormconfig');
+
 
 const app = new App(5000);
 const agent = request(app.app);
