@@ -1,9 +1,9 @@
 import * as Factory from 'factory.ts';
-import User from '../entity/User';
-import Apartment from '../entity/Apartment';
-import Board from '../entity/Board';
-import Comment from '../entity/Comment';
-User;
+import User from '../entities/User';
+import Apartment from '../entities/Apartment';
+import Board from '../entities/Board';
+import Comment from '../entities/Comment';
+
 
 export const userFactory = Factory.Sync.makeFactory<User>({
   id: Factory.each((i) => i),
