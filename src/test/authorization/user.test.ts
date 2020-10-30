@@ -1,10 +1,9 @@
 import request from 'supertest';
 import App from '../../app';
 import {userFactory} from '../../database/factory/user.factory';
-import {getRepository, createConnection, getConnectionOptions} from 'typeorm';
-// import config from '../../../ormconfig';
-const config = require('../../../ormconfig');
-import User from '../../database/entity/User';
+import {getRepository} from 'typeorm';
+import User from '../../database/entities/User';
+import { createDatabaseConnection } from "../../database";
 
 const app = new App(5000);
 const agent = request(app.app);
@@ -13,9 +12,7 @@ describe('User Test', () => {
 	// * 팩토리 패턴으로 데이터를 만들고
 	// * 데이터를 넣고 지우는 과정을 반복
 	beforeAll(async () => {
-		const option = await getConnectionOptions();
-		Object.assign(option, config);
-		const connection = await createConnection(option);
+		await createDatabaseConnection();
 		const user = userFactory.build({
 			email: 'test@gmail.com',
 			password:

@@ -115,3 +115,5 @@ temp/
 
 build/
 package-lock.json
+
+.idea

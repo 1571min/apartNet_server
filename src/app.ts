@@ -1,15 +1,12 @@
 import express from 'express';
-// import config from '../ormconfig';
-import { createConnection, getConnectionOptions } from 'typeorm';
 import router from './routes/index';
 import bodyParser from 'body-parser';
-// import config from '../ormconfig';
-const config = require('../ormconfig');
 import session from 'express-session';
 import cors from 'cors';
 import morgan from 'morgan';
 import middleware from './middleware';
 import helmet from 'helmet';
+import { createDatabaseConnection } from "./database";
 
 class App {
   public app: express.Application;
@@ -18,18 +15,20 @@ class App {
   constructor(port: number) {
     this.app = express();
     this.port = port;
+    this.setDatabase();
     this.initializeMiddlewares();
   }
 
-  private async initializeMiddlewares() {
-    const option = await getConnectionOptions();
-    Object.assign(option, config);
-    const connection = await createConnection(option);
-    if (connection) {
-      console.log('database connection :)');
-    } else {
-      throw Error();
+  private async setDatabase(): Promise<void> {
+    try {
+      await createDatabaseConnection();
+      console.log('db 정상 접속');
+    } catch (error) {
+      throw  error;
     }
+  }
+
+  private async initializeMiddlewares() {
     this.app.use(bodyParser.json());
     this.app.use(
       session({
@@ -45,6 +44,8 @@ class App {
     this.app.use('/', router);
     this.app.use(middleware.errorHandler);
   }
+
+
 
   public listen() {
     this.app.listen(this.port, () => {
