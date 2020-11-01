@@ -7,11 +7,11 @@ export interface userInfo {
   address: string;
 }
 export default {
-  getUser: async (email: string) => {
+  getUser: async (id: number) => {
     const response = await getConnection()
       .getRepository(User)
       .createQueryBuilder('user')
-      .where('user.email = :email', { email })
+      .where('user.id = :id', { id })
       .getOne();
     return response;
   },

@@ -1,18 +1,13 @@
 import request from 'supertest';
 import App from '../app';
-import {getRepository, createConnection, getConnectionOptions} from 'typeorm';
-
-const config = require('../../ormconfig');
-
+import { createDatabaseConnection } from "../database";
 
 const app = new App(5000);
 const agent = request(app.app);
 
 describe('Board Test', () => {
 	beforeAll(async () => {
-		const option = await getConnectionOptions();
-		Object.assign(option, config);
-		const connection = await createConnection(option);
+		await createDatabaseConnection();
 	});
 	afterAll(async () => {
 	});

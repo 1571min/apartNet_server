@@ -6,6 +6,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import middleware from './middleware';
 import helmet from 'helmet';
+import { useExpressServer } from "routing-controllers";
+import { routingControllerOptions } from "./utils/RoutingConfig";
 import { createDatabaseConnection } from "./database";
 
 class App {
@@ -48,6 +50,7 @@ class App {
 
 
   public listen() {
+    useExpressServer(this.app,routingControllerOptions);
     this.app.listen(this.port, () => {
       console.log(`App listening on the port ${this.port}`);
     });

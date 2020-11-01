@@ -1,4 +1,4 @@
-import userUtil from '../../util/userUtil';
+import userUtil from '../../utils/userUtil';
 import userRepository from '../../database/repository/userRepository';
 import { Express, Request, Response, NextFunction } from 'express';
 import HttpException from '../../exceptions/HttpException';

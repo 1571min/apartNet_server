@@ -1,8 +1,6 @@
-import userUtil from '../../util/userUtil';
+import userUtil from '../../utils/userUtil';
 import userRepository from '../../database/repository/userRepository';
 import { Express, Request, Response, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken';
-import { jwtReturn } from '../../util/userUtil';
 import HttpException from '../../exceptions/HttpException';
 
 type SessionRequest = Request & {

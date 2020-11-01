@@ -1,7 +1,5 @@
 import { createConnection, ConnectionOptions, useContainer } from 'typeorm';
 import { env } from './env';
-import Container from 'typedi';
-import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 /**
  * 데이터베이스 커넥션을 생성한다.
@@ -17,6 +15,7 @@ export async function createDatabaseConnection(): Promise<void> {
       database: env.database.name,
       entities: [__dirname + '/database/entities/**/*.ts',__dirname + '/database/entities/**/*.js'],
     };
+    console.log(connectionOpts);
     await createConnection(connectionOpts);
   } catch (error) {
     throw error;

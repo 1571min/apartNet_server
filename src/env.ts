@@ -1,6 +1,5 @@
-/**
- * NODE_ENV에 따른 .env 파일을 로드한다.
- */
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config({
   path: `../env`,
 });

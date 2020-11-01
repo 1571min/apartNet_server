@@ -1,18 +1,18 @@
 import request from 'supertest';
-import App from '../../app';
 import {userFactory} from '../../database/factory/user.factory';
 import {getRepository} from 'typeorm';
 import User from '../../database/entities/User';
-import { createDatabaseConnection } from "../../database";
+import app from "../utils/testApp";
+import { createDatabaseTestConnection } from "../utils/database";
 
-const app = new App(5000);
-const agent = request(app.app);
+
+const agent = request(app);
 
 describe('User Test', () => {
 	// * 팩토리 패턴으로 데이터를 만들고
 	// * 데이터를 넣고 지우는 과정을 반복
 	beforeAll(async () => {
-		await createDatabaseConnection();
+		await createDatabaseTestConnection();
 		const user = userFactory.build({
 			email: 'test@gmail.com',
 			password:
@@ -23,70 +23,69 @@ describe('User Test', () => {
 	afterAll(async () => {
 		await getRepository(User).clear();
 	});
-	describe('POST /user/signin', () => {
-		it('should return 200 OK', () => {
-			return agent
-				.post('/user/signin')
-				.send({
-					inputValue: {email: 'test@gmail.com', password: '1234'},
-				})
-				.expect(200);
+	describe('POST /auth/login', () => {
+		it('should return 200 OK', async () => {
+			const result = await agent
+				.post('/auth/login')
+				.send(
+					 {email: 'test@gmail.com', password: '1234'},
+				).expect(200);
 		});
 		it('should return 403', () => {
 			return agent
-				.post('/user/signin')
-				.send({
-					inputValue: {email: 'test@gmail.com', password: '1111'},
-				})
+				.post('/auth/login')
+				.send(
+					 {email: 'test@gmail.com', password: '1111'},
+				)
 				.expect(403);
 		});
 
 		it('should return 404', () => {
 			return agent
-				.post('/user/signin')
-				.send({
-					inputValue: {email: 'test44@gmail.com', password: '1234'},
-				})
+				.post('/auth/login')
+				.send(
+					 {email: 'test44@gmail.com', password: '1234'},
+				)
 				.expect(404);
 		});
 	});
-	describe('GET /user/signout', () => {
+	describe('GET /auth/logout', () => {
 		it('should return 200 OK', () => {
-			return agent.get('/user/signout').expect(200);
+			return agent.get('/auth/logout').expect(200);
 		});
 	});
-	describe('POST /user/signup', () => {
+	describe('POST /auth/register', () => {
 		it('should return 200 OK', () => {
 			return agent
-				.post('/user/signup')
+				.post('/auth/register')
 				.send({
-					email: 'test12@gmail.com',
+					email: 'test1222222@gmail.com',
 					password: '1234',
-					fullName: 'leemintaek',
+					fullName: 'leemintaek22',
 					address: 'seoul',
 				})
 				.expect(200);
 		});
 		it('should return 403 OK', () => {
 			return agent
-				.post('/user/signup')
+				.post('/auth/register')
 				.send({
 					email: 'test@gmail.com',
 					password: '1234',
-					full_name: 'leemintaek',
-					address_name: 'seoul',
+					fullName: 'leemintaek',
+					address: 'seoul',
 				})
 				.expect(403);
 		});
 	});
-	describe('POST /user/userinfo', () => {
+	describe('POST /auth/userinfo', () => {
 		it('should return 200 OK', async () => {
-			const res = await agent.post('/user/signin').send({
-				inputValue: {email: 'test@gmail.com', password: '1234'},
-			});
+			const res = await agent.post('/auth/login').send(
+				 {email: 'test@gmail.com', password: '1234'},
+			);
 			const accessToken = res.body.access_token;
 			const userInfoRes = await agent
-				.get('/user/userinfo')
+				.get('/users/userinfo')
 				.set('Authorization', `Bearer ${accessToken}`);
 			return expect(userInfoRes.body).toEqual({
 				email: 'test@gmail.com',
@@ -95,7 +94,7 @@ describe('User Test', () => {
 			});
 		});
 		it('should return 403', () => {
-			return agent.get('/user/userinfo').set('Authorization', '').expect(403);
+			return agent.get('/users/userinfo').set('Authorization', '').expect(403);
 		});
 	});
 });

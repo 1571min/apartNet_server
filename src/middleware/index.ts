@@ -1,4 +1,4 @@
-import userUtil from '../util/userUtil';
+import userUtil from '../utils/userUtil';
 import { Express, Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import HttpException from '../exceptions/HttpException';

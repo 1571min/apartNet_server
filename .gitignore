@@ -117,3 +117,5 @@ build/
 package-lock.json
 
 .idea
+
+src/test/database.ts
